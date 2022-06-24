@@ -2,35 +2,38 @@ struct Solution {
 
 }
 
+
+
 impl Solution {
-    pub fn is_palindrome(x: i32) -> bool {
-        if x < 0 {
-            return false;
+    pub fn is_valid(s: String) -> bool {
+        let mut stack: Vec<char> = vec![];
+        
+        for chr in s.chars() {
+            if stack.len() > 0 && Self::is_closing(&chr) && Self::get_opening(&chr) == stack[stack.len()-1]  {
+                stack.pop();
+            } else {
+                stack.push(chr);
+            }
         }
 
-        let mut digits = vec![];
+        return stack.len() == 0;
+        
+        unreachable!();
+    }
 
-        let mut num = x;
+    pub fn is_closing(chr: &char) -> bool {
+        return chr == &')' || chr == &'}' || chr == &']';
+    }
 
-        while num > 0 {
-            digits.push(num%10);
-            num = num/10;
-        }
-        let mut val = 0;
-        for i in (0..digits.len()).rev() {
-            let mut num: i32 = 10;
-            num = num.pow(digits.len() as u32 - 1 - i as u32);
-            val += digits[i]*num
-        }
-
-        return val == x;
-
-        unreachable!()
+    pub fn get_opening(chr: &char) -> char {
+        if chr == &')' { return '(';}
+        else if chr == &'}' {return '{';}
+        else {return '[';}
     }
 }
 
 fn main() {
-    let ans = Solution::is_palindrome(121);
+    let ans = Solution::is_valid("()((])".to_string());
     println!("{ans}");
 }
 
